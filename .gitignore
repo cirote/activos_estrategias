@@ -1,0 +1,18 @@
+### PhpStorm ###
+/.idea
+
+### Laravel Defaults ###
+/vendor
+/node_modules
+/storage/*.key
+Homestead.yaml
+Homestead.json
+.env
+
+### Vagrant ###
+/.vagrant
+
+### barryvdh/laravel-ide-helper ###
+.phpstorm.meta.php
+_ide_helper.php
+
