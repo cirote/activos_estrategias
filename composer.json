@@ -1,5 +1,5 @@
 {
-    "name": "cirote/activos_opciones",
+    "name": "cirote/activos_estrategias",
     "description": "Sistema de activos",
     "type": "library",
     "license": "",
@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Cirote\\Opciones\\": "src/"
+            "Cirote\\Estrategias\\": "src/"
         }
     },
     "require": {
@@ -23,7 +23,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Cirote\\Opciones\\ServiceProvider\\ServiceProvider"
+                "Cirote\\Estrategias\\ServiceProvider\\ServiceProvider"
             ],
             "aliases": {
 

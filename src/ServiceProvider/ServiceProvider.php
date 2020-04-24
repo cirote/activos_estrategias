@@ -1,13 +1,8 @@
 <?php
 
-namespace Cirote\Opciones\ServiceProvider;
+namespace Cirote\Estrategias\ServiceProvider;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Cirote\Opciones\Actions\CalcularMesOpcionAction;
-use Cirote\Opciones\Actions\CalcularAnoOpcionAction;
-use Cirote\Opciones\Actions\CalcularStrikeOpcionAction;
-use Cirote\Opciones\Actions\CalcularTickerCompletoOpcionAction;
-use Cirote\Opciones\Actions\CalcularVencimientoOpcionAction;
 
 class ServiceProvider extends BaseServiceProvider
 {
@@ -22,27 +17,14 @@ class ServiceProvider extends BaseServiceProvider
 
 	public function boot()
 	{
-		$this->loadTranslationsFrom(__DIR__ . '/../Translations', 'opciones');
+		$this->loadTranslationsFrom(__DIR__ . '/../Translations', 'estrategias');
 
 		$this->bind_class();
 	}
 
 	private function bind_class()
 	{
-		$this->app->singleton(CalcularStrikeOpcionAction::class, function ($app) 
-		{
-    		return new CalcularStrikeOpcionAction();
-		});
 
-		$this->app->singleton(CalcularVencimientoOpcionAction::class, function ($app) 
-		{
-    		return new CalcularVencimientoOpcionAction();
-		});
-
-		$this->app->singleton(CalcularTickerCompletoOpcionActionCalcularTickerCompletoOpcionAction::class, function ($app) 
-		{
-    		return new CalcularTickerCompletoOpcionAction($app->make(CalcularVencimientoOpcionAction::class));
-		});
 	}
 
 	private function register_migrations()
@@ -57,7 +39,7 @@ class ServiceProvider extends BaseServiceProvider
 
 	private function register_views()
 	{
-		$this->loadViewsFrom(__DIR__ . '/../Views', 'opciones');
+		$this->loadViewsFrom(__DIR__ . '/../Views', 'estrategias');
 	}
 
 }
