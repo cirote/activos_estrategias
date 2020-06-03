@@ -17,7 +17,7 @@ class ServiceProvider extends BaseServiceProvider
 
 	public function boot()
 	{
-		$this->loadTranslationsFrom(__DIR__ . '/../Translations', 'estrategias');
+		//	$this->loadTranslationsFrom(__DIR__ . '/../Translations', 'estrategias');
 
 		$this->bind_class();
 	}

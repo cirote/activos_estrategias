@@ -7,7 +7,7 @@ use Cirote\Estrategias\Models\Lanzamiento;
 
 class CrearLanzamientosDesdeOpcionesAction
 {
-    public function execute(Collection $opciones): Collection
+    public function __invoke(Collection $opciones): Collection
     {
     	return $opciones->map(function ($opcion) 
         {

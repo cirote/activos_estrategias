@@ -15,7 +15,7 @@
         }
     },
     "require": {
-
+        "guzzlehttp/guzzle": "*"
     },
     "require-dev": {
 
