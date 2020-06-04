@@ -3,6 +3,8 @@
 namespace Cirote\Estrategias\ServiceProvider;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Cirote\Estrategias\Actions\LeerDatosAction as LeerDatos;
+use Cirote\Estrategias\Interfaces\IolInterface;
 
 class ServiceProvider extends BaseServiceProvider
 {
@@ -24,7 +26,15 @@ class ServiceProvider extends BaseServiceProvider
 
 	private function bind_class()
 	{
+		$this->app->singleton(IolInterface::class, function ($app) 
+		{
+    		return new IolInterface();
+		});
 
+		$this->app->singleton(LeerDatos::class, function ($app) 
+		{
+    		return new LeerDatos($app->make(IolInterface::class));
+		});
 	}
 
 	private function register_migrations()

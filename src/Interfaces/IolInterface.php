@@ -12,8 +12,6 @@ class IolInterface
 
 	const CACHE_NAME = 'iol_token';
 
-	const RFC7231_FORMAT = 'D, d M Y H:i:s \G\M\T';
-
 	private $cliente;
 
 	private $token;
@@ -26,60 +24,54 @@ class IolInterface
     public function __invoke()
     {
     	dd(
-    		$this->getPuts()
+    		$this->getAcciones()
     	);
     }
 
+    public function getAcciones()
+    {
+    	return $this->getPanel('acciones', 'Merval');
+	}
+
     private function getCalls()
     {
-    	$parametros = [
-		    'headers' => [
-		        'Authorization' => 'Bearer ' . $this->getTokenDeAcceso()
-		    ],
-		    'form_params' => [
-		        'panelCotizacion.instrumento' => 'opciones',
-		        'panelCotizacion.panel' => 'Calls',
-		        'panelCotizacion.pais' => 'argentina',
-		        'api_key' => $this->getTokenDeAcceso()
-			]
-        ];
-
-		$url = 'https://api.invertironline.com/api/v2/Cotizaciones/opciones/Calls/argentina';
-
-		$response = $this->cliente->get($url, $parametros);
-
-		if ($response->getStatusCode() == 200)
-		{
-			return json_decode((string) $response->getBody());
-		}
-
-		dd('Error leyendo informacion de los calls');
+    	return $this->getPanel('opciones', 'Calls');
 	}
 
     private function getPuts()
     {
+    	return $this->getPanel('opciones', 'Puts');
+	}
+
+    public function getOpciones()
+    {
+    	return $this->getPanel('opciones', 'Todas');
+	}
+
+    private function getPanel($tipoActivo, $panel)
+    {
     	$parametros = [
 		    'headers' => [
 		        'Authorization' => 'Bearer ' . $this->getTokenDeAcceso()
 		    ],
 		    'form_params' => [
-		        'panelCotizacion.instrumento' => 'opciones',
-		        'panelCotizacion.panel' => 'Puts',
+		        'panelCotizacion.instrumento' => $tipoActivo,
+		        'panelCotizacion.panel' => $panel,
 		        'panelCotizacion.pais' => 'argentina',
 		        'api_key' => $this->getTokenDeAcceso()
 			]
         ];
 
-		$url = 'https://api.invertironline.com/api/v2/Cotizaciones/opciones/Puts/argentina';
+		$url = "https://api.invertironline.com/api/v2/Cotizaciones/{$tipoActivo}/{$panel}/argentina";
 
 		$response = $this->cliente->get($url, $parametros);
 
 		if ($response->getStatusCode() == 200)
 		{
-			return json_decode((string) $response->getBody());
+			return json_decode((string) $response->getBody(), true)['titulos'];
 		}
 
-		dd('Error leyendo informacion de los calls');
+		dd("Error leyendo informacion del panel [{$panel}]");
 	}
 
     private function getTokenDeAcceso()
