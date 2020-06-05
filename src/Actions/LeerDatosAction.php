@@ -22,7 +22,7 @@ class LeerDatosAction
 		$this->interface = $interface;
 	}
 
-    public function __invoke()
+    public function execute()
     {
     	$startedAt = microtime(true);
 

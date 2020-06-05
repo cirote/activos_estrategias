@@ -8,7 +8,7 @@ use Cirote\Opciones\Config\Config;
 use Cirote\Opciones\Models\Call;
 use Cirote\Activos\Models\Activo;
 use Cirote\Estrategias\Actions\CrearLanzamientosDesdeOpcionesAction;
-use Cirote\Estrategias\Actions\LeerDatosAction;
+use Cirote\Estrategias\Actions\EstrategiaLanzamientoCubiertoAction as ObtenerLanzamientosCubiertos;
 
 class EstrategiasController extends Controller
 {
@@ -25,10 +25,16 @@ class EstrategiasController extends Controller
             ->withLanzamientos($lanzamientos->paginate(Config::ELEMENTOS_POR_PAGINA));
     }
 
-    public function tester(LeerDatosAction $leerDatos)
+    public function tester(ObtenerLanzamientosCubiertos $obtenerLanzamientosCubiertos)
     {
+        $lanzamientos = collect($obtenerLanzamientosCubiertos->execute())
+            ->sortByDesc('TNA');
+
+        return view('estrategias::estrategias.lanzamientos')
+            ->withLanzamientos($lanzamientos->paginate(Config::ELEMENTOS_POR_PAGINA));
+            
         dd(
-            $leerDatos()
+            $lanzamientos
         );
     }
 }

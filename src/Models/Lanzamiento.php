@@ -2,8 +2,6 @@
 
 namespace Cirote\Estrategias\Models;
 
-use Cirote\Opciones\Models\Call;
-
 class Lanzamiento
 {
 	private $call;
@@ -34,12 +32,12 @@ class Lanzamiento
 
   	public function valorImplicito() 
   	{
-		return max($this->call->subyacente->ask->precio - $this->call->strike, 0);
+		return max($this->subyacente->precioVenta() - $this->call->strike, 0);
 	}
 
 	private function valorExplicito() 
 	{
-		return max($this->call->bid->precio - $this->valorImplicito, 0);
+		return max($this->call->precioCompra - $this->valorImplicito, 0);
 	}
 
 	private function tasa() 

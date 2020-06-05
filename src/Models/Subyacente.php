@@ -53,4 +53,24 @@ class Subyacente
 
 		$this->opciones[$ticker][$tipo] = $opcion;
 	}
+
+	public function opciones()
+	{
+		return $this->opciones;
+	}
+
+	public function precioVenta() 
+  	{
+  		if (isset($this->attributes['puntas']))
+		{
+			return $this->attributes['puntas']['precioVenta'];
+		}
+
+		return 0;
+	}
+
+	public function simbolo() 
+  	{
+		return $this->attributes['simbolo'];
+	}
 }
