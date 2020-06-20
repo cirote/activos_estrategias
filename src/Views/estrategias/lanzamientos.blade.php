@@ -40,20 +40,20 @@
 						<tr>
 							<td>{{ $lanzamientos->firstItem() + $loop->index }}.</td>
 
-							<td>{{ $lanzamiento->subyacente->simbolo() }}</td>
+							<td>{{ $lanzamiento->subyacente->simbolo }}</td>
 							<td></td>
 							<td></td>
-							<td>{{ $lanzamiento->subyacente->precioVenta() }}</td>
+							<td align="right">{{ number_format($lanzamiento->subyacente->precioVenta, 2, '.', ',') }}</td>	
 							
 							<td>{{ $lanzamiento->call->simbolo }}</td>
-							<td>{{ $lanzamiento->call->strike }}</td>
-							<td>{{ $lanzamiento->call->dias }}</td>
+							<td align="right">{{ number_format($lanzamiento->call->strike, 2, '.', ',') }}</td>	
+							<td align="right">{{ $lanzamiento->call->dias }}</td>
 							<td></td>
-							<td>{{ $lanzamiento->call->precioCompra }}</td>
+							<td align="right">{{ number_format($lanzamiento->call->precioCompra, 2, '.', ',') }}</td>	
 
-							<td></td>							
-							<td></td>							
-							<td></td>							
+							<td></td>
+							<td></td>
+							<td></td>
 							<td align="right">{{ number_format($lanzamiento->tasa * 100, 2, '.', ',') }}</td>	
 							<td align="right">{{ number_format($lanzamiento->TNA * 100, 2, '.', ',') }}</td>							
 						</tr>

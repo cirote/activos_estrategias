@@ -2,50 +2,74 @@
 
 namespace Cirote\Estrategias\Actions;
 
+use Illuminate\Support\Facades\Cache;
+use Cirote\Opciones\Actions\CalcularStrikeOpcionAction;
+use Cirote\Opciones\Actions\CalcularVencimientoOpcionAction;
 use Cirote\Estrategias\Interfaces\IolInterface;
+use Cirote\Estrategias\Models\Contenedor;
 use Cirote\Estrategias\Models\Subyacente;
+use Cirote\Estrategias\Models\Call;
+use Cirote\Estrategias\Models\Put;
 
 class LeerDatosAction
 {
 	private $interface;
 
+    private $datos;
+
 	private $acciones;
 
 	private $opciones;
 
-	private $activos = [];
+    private $calcularStrike;
 
-	private $activos_por_sigla = [];
+    private $calcularVencimiento;
 
-	public function __construct(IolInterface $interface)
+	public function __construct(Contenedor $contenedor, IolInterface $interface)
 	{
 		$this->interface = $interface;
+
+        $this->datos = &$contenedor->datos;
+
+        $this->calcularStrike = App()->make(CalcularStrikeOpcionAction::class);
+
+        $this->calcularVencimiento = App()->make(CalcularVencimientoOpcionAction::class);
 	}
 
     public function execute()
     {
-    	$startedAt = microtime(true);
+        if (Cache::has('datos_base_1')) 
+        {
+            $this->datos = Cache::get('datos_base_1');
 
-    	if (! $this->activos)
-    	{
-    		$this->acciones = $this->interface->getAcciones();
+            return $this->datos;
+        }
 
-			$this->opciones = $this->interface->getOpciones();
+        return Cache::remember('datos_base_1', 600, function () 
+        {
+            $startedAt = microtime(true);
 
-	    	$startedAt = microtime(true);
+            if (! isset($this->datos['Activos por ticker']))
+            {
+                $this->acciones = $this->interface->getAcciones();
 
-    		$this->crearActivos();
+                $this->opciones = $this->interface->getOpciones();
 
-    		$this->agregarDatosActivos();
+                $startedAt = microtime(true);
 
-    		$this->agregarOpciones();
-    	}
+                $this->crearActivos();
 
-		$finishedAt = microtime(true);
+                $this->agregarDatosActivos();
 
-		echo 'Tiempo: ' . ($finishedAt - $startedAt);
+                $this->agregarOpciones();
+            }
 
-    	return $this->activos;
+            $finishedAt = microtime(true);
+
+            $this->datos['Tiempo de proceso'] = ($finishedAt - $startedAt);
+
+            return $this->datos;
+        });
     }
 
     private function crearActivos()
@@ -58,9 +82,9 @@ class LeerDatosAction
 
     		$activo = new Subyacente(['tickerOpcion' => $sigla]);
 
-    		$this->activos[$ticker] = $activo;
+            $this->datos['Activos por ticker'][$ticker] = $activo;
 
-    		$this->activos_por_sigla[$sigla] = $activo;
+            $this->datos['Activos por sigla'][$sigla] = $activo;
     	}
     }
 
@@ -70,24 +94,48 @@ class LeerDatosAction
     	{
     		$ticker = $activo['simbolo'];
 
-    		if (isset($this->activos[$ticker]))
+    		if (isset($this->datos['Activos por ticker'][$ticker]))
     		{
-    			$this->activos[$ticker]->addAttributes($activo);
+    			$this->datos['Activos por ticker'][$ticker]->addAttributes($activo);
     		}
     	}
     }
 
     private function agregarOpciones()
     {
-    	foreach ($this->opciones as $activo)
+    	foreach ($this->opciones as $opcion)
     	{
-    		$ticker = substr($activo['simbolo'], 0, 3);
+    		$sigla = substr($opcion['simbolo'], 0, 3);
 
-    		if (isset($this->activos_por_sigla[$ticker]))
+    		if (isset($this->datos['Activos por sigla'][$sigla]))
     		{
-    			$this->activos_por_sigla[$ticker]->addOpcion($activo);
+                $this->crearOpcion($sigla, $opcion);
     		}
     	}
+    }
+
+    private function crearOpcion($sigla, $attributes = [])
+    {
+        $ticker = substr($attributes['simbolo'], 4);
+
+        $tipo = substr($attributes['simbolo'], 3, 1);
+
+        $subyacente = $this->datos['Activos por sigla'][$sigla];
+
+        $attributes['precioEjercicio'] = $this->calcularStrike->execute($attributes['simbolo']);
+
+        $attributes['fechaVencimiento'] = $this->calcularVencimiento->execute($attributes['simbolo']);
+
+        if ($tipo == 'C')
+        {
+            $opcion = new Call($subyacente, $attributes);
+
+        } else {
+
+            $opcion = new Put($subyacente, $attributes);
+        }
+
+        $this->datos['Opciones por sigla'][$sigla][$ticker][$tipo] = $opcion;
     }
 
     private function datosActivos()

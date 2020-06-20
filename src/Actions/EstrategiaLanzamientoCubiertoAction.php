@@ -29,7 +29,7 @@ class EstrategiaLanzamientoCubiertoAction
 
     private function crearLanzamientos()
     {
-    	foreach($this->leerDatos->execute() as $subyacente)
+    	foreach($this->leerDatos->execute()['Activos por ticker'] as $subyacente)
     	{
 	    	foreach($subyacente->opciones() as $opciones)
 	    	{

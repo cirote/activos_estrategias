@@ -7,20 +7,15 @@ use Cirote\Estrategias\Models\Subyacente;
 
 class Opcion
 {
-	private $subyacente;
+	use HasAttributes, HasSimbolo;
 
-	private $attributes = [];
+	private $subyacente;
 
 	public function __construct(Subyacente $subyacente, $attributes = [])
 	{
 		$this->subyacente = $subyacente;
 
 		$this->attributes = $attributes;
-	}
-
-	public function __get($property)
-	{
-		return $this->$property();
 	}
 
 	private function dias() 
@@ -33,12 +28,7 @@ class Opcion
 		return $this->attributes['precioEjercicio'];
 	}
 
-	private function simbolo() 
-  	{
-		return $this->attributes['simbolo'];
-	}
-
-	private function subyacente() 
+	private function subyacente(): Subyacente
   	{
 		return $this->subyacente;
 	}

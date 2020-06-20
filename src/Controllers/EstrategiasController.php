@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use Cirote\Opciones\Config\Config;
 use Cirote\Opciones\Models\Call;
 use Cirote\Activos\Models\Activo;
+
 use Cirote\Estrategias\Actions\CrearLanzamientosDesdeOpcionesAction;
-use Cirote\Estrategias\Actions\EstrategiaLanzamientoCubiertoAction as ObtenerLanzamientosCubiertos;
+use Cirote\Estrategias\Models\Contenedor;
+use Cirote\Estrategias\Models\Lanzamiento;
 
 class EstrategiasController extends Controller
 {
@@ -25,11 +27,13 @@ class EstrategiasController extends Controller
             ->withLanzamientos($lanzamientos->paginate(Config::ELEMENTOS_POR_PAGINA));
     }
 
-    public function tester(ObtenerLanzamientosCubiertos $obtenerLanzamientosCubiertos)
+    public function tester()
     {
-        $lanzamientos = collect($obtenerLanzamientosCubiertos->execute())
-            ->sortByDesc('TNA');
+//dd(resolve(Contenedor::class));
 
+        $lanzamientos = Lanzamiento::all();
+        
+//dd(resolve(Contenedor::class)->getDatos());
         return view('estrategias::estrategias.lanzamientos')
             ->withLanzamientos($lanzamientos->paginate(Config::ELEMENTOS_POR_PAGINA));
             
