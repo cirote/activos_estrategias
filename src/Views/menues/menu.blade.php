@@ -1,4 +1,9 @@
 <li class="header">ESTRATEGIAS</li>
+<li class="{{ Request::routeIs('estrategias.bases') ? "active" : "" }}">
+    <a href="{{ route('estrategias.bases', [], false) }}">
+        <i class="fa fa-rocket"></i> <span>Bases</span>
+    </a>
+</li>
 <li class="{{ Request::routeIs('estrategias.lanzamiento_cubierto') ? "active" : "" }}">
     <a href="{{ route('estrategias.lanzamiento_cubierto', [], false) }}">
         <i class="fa fa-rocket"></i> <span>Lanzamiento cubierto</span>

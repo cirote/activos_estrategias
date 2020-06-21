@@ -45,7 +45,7 @@ class LeerDatosAction
             return $this->datos;
         }
 
-        return Cache::remember('datos_base_1', 600, function () 
+        return Cache::remember('datos_base_1', 60 * 60, function () 
         {
             $startedAt = microtime(true);
 

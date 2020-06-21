@@ -3,28 +3,24 @@
 namespace Cirote\Estrategias\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Cirote\Opciones\Config\Config;
-use Cirote\Opciones\Models\Call;
-use Cirote\Activos\Models\Activo;
 
-use Cirote\Estrategias\Actions\CrearLanzamientosDesdeOpcionesAction;
 use Cirote\Estrategias\Models\Contenedor;
+use Cirote\Estrategias\Models\Base;
 use Cirote\Estrategias\Models\Lanzamiento;
 
 class EstrategiasController extends Controller
 {
-	public function lanzamiento_cubierto(CrearLanzamientosDesdeOpcionesAction $crearLanzamientos)
+    public function bases()
     {
-        $lanzamientos = $crearLanzamientos(
-            Call::with('precio', 'ticker', 'subyacente')
-                ->has('precio')
-                ->get()
-        )
-            ->sortByDesc('TNA');
+        return view('estrategias::estrategias.bases')
+            ->withBases(Base::all()->paginate(Config::ELEMENTOS_POR_PAGINA));
+    }
 
-        return view('estrategias::estrategias.index')
-            ->withLanzamientos($lanzamientos->paginate(Config::ELEMENTOS_POR_PAGINA));
+	public function lanzamiento_cubierto()
+    {
+        return view('estrategias::estrategias.lanzamientos')
+            ->withLanzamientos(Lanzamiento::all()->paginate(Config::ELEMENTOS_POR_PAGINA));
     }
 
     public function tester()
@@ -36,7 +32,7 @@ class EstrategiasController extends Controller
 //dd(resolve(Contenedor::class)->getDatos());
         return view('estrategias::estrategias.lanzamientos')
             ->withLanzamientos($lanzamientos->paginate(Config::ELEMENTOS_POR_PAGINA));
-            
+
         dd(
             $lanzamientos
         );
