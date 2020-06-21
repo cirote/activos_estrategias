@@ -6,6 +6,6 @@ trait HasSimbolo
 {
 	public function simbolo() 
   	{
-		return $this->attributes['simbolo'];
+		return $this->attributes['simbolo'] ?? 'n/a';
 	}
 }

@@ -33,10 +33,10 @@ class CrearBasesAction
     	{
 	    	foreach($subyacente->opciones() as $base => $opciones)
 	    	{
-	    		if (isset($opciones['C']))
-	    		{
-			    	$this->bases[] = new Base($base, $opciones['C']);	
-	    		}
+                if (isset($opciones['C']) OR isset($opciones['V']))
+                {
+                    $this->bases[] = new Base($base, $opciones['C'] ?? null, $opciones['V'] ?? null);   
+                }
 	    	}
     	}
     }

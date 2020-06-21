@@ -23,16 +23,31 @@ class Base
         return collect($obtenerBases->execute());
 	}
 
-	public function __construct($base, Call $call)
+	public function __construct($base, ?Call $call, ?Put $put)
 	{
 		$this->base = $base;
 
 		$this->call = $call;
+
+		$this->put = $put;
+
+		if ($call)
+		{
+			if ($put)
+			{
+				$this->sintetica = new Sintetica($call, $put);
+			}			
+		}
 	}
 
 	private function subyacente()
 	{
-		return $this->call->subyacente;
+		if ($this->call)
+		{
+			return $this->call->subyacente;
+		}
+
+		return $this->put->subyacente;
 	}
 
 	private function base()
@@ -43,5 +58,15 @@ class Base
 	private function call()
 	{
 		return $this->call;
+	}
+
+	private function put()
+	{
+		return $this->put;
+	}
+
+	private function sintetica()
+	{
+		return $this->sintetica;
 	}
 }

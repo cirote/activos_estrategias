@@ -7,7 +7,7 @@ use Cirote\Estrategias\Models\Subyacente;
 
 class Opcion
 {
-	use HasAttributes, HasSimbolo;
+	use HasAttributes, HasPrecios, HasSimbolo;
 
 	private $subyacente;
 
@@ -25,16 +25,11 @@ class Opcion
 
 	private function strike() 
   	{
-		return $this->attributes['precioEjercicio'];
+		return $this->attributes['precioEjercicio'] ?? 0;
 	}
 
 	private function subyacente(): Subyacente
   	{
 		return $this->subyacente;
-	}
-
-	private function precioCompra() 
-  	{
-		return $this->attributes['puntas']['precioCompra'];
 	}
 }

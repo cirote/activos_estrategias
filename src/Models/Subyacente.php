@@ -8,7 +8,7 @@ use Cirote\Estrategias\Models\Put;
 
 class Subyacente
 {
-	use HasAttributes, HasSimbolo;
+	use HasAttributes, HasPrecios, HasSimbolo;
 
 	private $opciones = [];
 
@@ -22,15 +22,5 @@ class Subyacente
 		return resolve(Contenedor::class)->getDatos()['Opciones por sigla'][$this->attributes['tickerOpcion']];
 
 		return $this->opciones;
-	}
-
-	public function precioVenta() 
-  	{
-  		if (isset($this->attributes['puntas']))
-		{
-			return $this->attributes['puntas']['precioVenta'];
-		}
-
-		return 0;
 	}
 }
