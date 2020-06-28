@@ -38,14 +38,14 @@ class LeerDatosAction
 
     public function execute()
     {
-        if (Cache::has('datos_base_1')) 
+        if (Cache::has('datos_base')) 
         {
-            $this->datos = Cache::get('datos_base_1');
+            $this->datos = Cache::get('datos_base');
 
             return $this->datos;
         }
 
-        return Cache::remember('datos_base_1', 60 * 60, function () 
+        return Cache::remember('datos_base', 60 * 60, function () 
         {
             $startedAt = microtime(true);
 
@@ -86,6 +86,10 @@ class LeerDatosAction
 
             $this->datos['Activos por sigla'][$sigla] = $activo;
     	}
+
+        ksort($this->datos['Activos por ticker']);
+
+        ksort($this->datos['Activos por sigla']);
     }
 
     private function agregarDatosActivos()
@@ -136,13 +140,21 @@ class LeerDatosAction
         }
 
         $this->datos['Opciones por sigla'][$sigla][$ticker][$tipo] = $opcion;
+
+        $fecha = $opcion->fechaVencimiento->format('Ym');
+
+        $this->datos['Opciones por strike'][$sigla][$opcion->strike_entero][$fecha][$tipo] = $opcion;
+
+        $this->datos['Opciones por vencimiento'][$sigla][$fecha][$opcion->strike_entero][$tipo] = $opcion;
     }
 
     private function datosActivos()
     {
     	return [
+            ['PAMP', 'PAM'],
+            ['COME', 'COM'],
     		['GGAL', 'GFG'],
-    		['PGR', 'PGR'],
+//    		['PGR', 'PGR'],     //  PGR no está en el panel general
     		['SUPV', 'SUP'],
     		['TXAR', 'TXA'],
     		['YPFD', 'YPF'],

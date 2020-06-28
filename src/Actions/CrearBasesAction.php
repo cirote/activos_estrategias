@@ -21,13 +21,13 @@ class CrearBasesAction
     {
     	if (! $this->bases)
         {
-            $this->crearLanzamientos();
+            $this->crearBases();
         }
 
         return $this->bases;
     }
 
-    private function crearLanzamientos()
+    private function crearBases()
     {
     	foreach($this->leerDatos->execute()['Activos por ticker'] as $subyacente)
     	{
@@ -35,7 +35,7 @@ class CrearBasesAction
 	    	{
                 if (isset($opciones['C']) OR isset($opciones['V']))
                 {
-                    $this->bases[] = new Base($base, $opciones['C'] ?? null, $opciones['V'] ?? null);   
+                    $this->bases[] = new Base($opciones['C'] ?? null, $opciones['V'] ?? null);   
                 }
 	    	}
     	}

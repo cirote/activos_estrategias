@@ -8,8 +8,6 @@ class Base
 {
 	use HasAttributes;
 
-	private $base;
-
 	private $call;
 
 	private $put;
@@ -20,13 +18,19 @@ class Base
 	{
 		$obtenerBases = resolve(ObtenerBases::class);
 
-        return collect($obtenerBases->execute());
+        return collect($obtenerBases->execute())->sort(function($a, $b) 
+        {
+	    	if ($a->orderString() == $b->orderString()) 
+	    	{
+	        	return 0;
+	    	}
+
+    		return ($a->orderString() < $b->orderString()) ? -1 : 1;
+		});
 	}
 
-	public function __construct($base, ?Call $call, ?Put $put)
+	public function __construct(?Call $call, ?Put $put)
 	{
-		$this->base = $base;
-
 		$this->call = $call;
 
 		$this->put = $put;
@@ -40,19 +44,54 @@ class Base
 		}
 	}
 
+	private function orderString()
+	{
+		return $this->subyacente->simbolo . (1000 + $this->strike) . $this->mes;
+	}
+
 	private function subyacente()
 	{
-		if ($this->call)
+		if ($this->put)
 		{
-			return $this->call->subyacente;
+			return $this->put->subyacente;
 		}
 
-		return $this->put->subyacente;
+		return $this->call->subyacente;
 	}
 
 	private function base()
 	{
 		return $this->base;
+	}
+
+	private function strike()
+	{
+		if ($this->put)
+		{
+			return $this->put->strike;
+		}
+
+		return $this->call->strike;
+	}
+
+	private function mes()
+	{
+		if ($this->put)
+		{
+			return $this->put->fechaVencimiento->format('m');
+		}
+
+		return $this->call->fechaVencimiento->format('m');
+	}
+
+	private function ano()
+	{
+		if ($this->put)
+		{
+			return $this->put->fechaVencimiento->format('Y');
+		}
+
+		return $this->call->fechaVencimiento->format('Y');
 	}
 
 	private function call()

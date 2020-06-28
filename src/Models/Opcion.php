@@ -18,6 +18,11 @@ class Opcion
 		$this->attributes = $attributes;
 	}
 
+	private function fechaVencimiento() 
+  	{
+		return $this->attributes['fechaVencimiento'];
+	}
+
 	private function dias() 
   	{
 		return Carbon::now()->diffInDays($this->attributes['fechaVencimiento']);
@@ -26,6 +31,11 @@ class Opcion
 	private function strike() 
   	{
 		return $this->attributes['precioEjercicio'] ?? 0;
+	}
+
+	private function strike_entero() 
+  	{
+		return (int) ($this->strike * 100);
 	}
 
 	private function subyacente(): Subyacente

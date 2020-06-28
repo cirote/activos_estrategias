@@ -58,7 +58,7 @@ class Sintetica
   			return 0;
   		}
 
-		return $this->call->strike + $this->put->precioVenta - $this->call->precioCompra;
+		return $this->call->strike - $this->put->precioVenta + $this->call->precioCompra;
 	}
 
 	private function precioVenta() 

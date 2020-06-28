@@ -14,7 +14,9 @@
 					<tbody>
 						<tr>
 							<th rowspan="2" style="width: 10px">#</th>
-							<th rowspan="2" style="width: 30px">Base</th>
+							<th rowspan="2" style="width: 30px">Strike</th>
+							<th rowspan="2" style="width: 30px">Mes</th>
+							<th rowspan="2" style="width: 30px">Ano</th>
 							<th colspan="5">Subyacente</th>
 							<th colspan="4">Calls</th>
 							<th colspan="4">Puts</th>
@@ -45,7 +47,9 @@
 						@foreach($bases as $base)
 						<tr>
 							<td>{{ $bases->firstItem() + $loop->index }}.</td>
-							<td>{{ $base->base }}</td>
+							<td align="right">{{ number_format($base->strike, 2, ',', '.') }}</td>
+							<td>{{ $base->mes }}</td>
+							<td>{{ $base->ano }}</td>
 
 							@php($bs = $base->subyacente)
 							<td>{{ $bs->simbolo }}</td>
