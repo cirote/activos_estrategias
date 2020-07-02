@@ -61,8 +61,18 @@ class Spread
 	{
 		return static::all()->filter(function ($spread, $key) 
         {
-        	return $spread->gananciaPorcentual() > 1;
+        	return $spread->gananciaPorcentual() > 2;
+		
+		})->sort(function($a, $b) 
+        {
+	    	if ($a->gananciaPorcentual() == $b->gananciaPorcentual()) 
+	    	{
+	        	return 0;
+	    	}
+
+    		return ($a->gananciaPorcentual() < $b->gananciaPorcentual()) ? 1 : -1;
 		});
+
 	}
 
 	public function __construct(Base $base1, Base $base2)
@@ -207,6 +217,11 @@ class Spread
 
 	protected function gananciaPorcentual() 
   	{
+  		if (! $this->rango())
+  		{
+  			return null;
+  		}
+
 		return (($this->gananciaMaxima() / $this->rango()) - 1) * 100;
 	}
 
