@@ -15,14 +15,13 @@
 						<tr>
 							<th rowspan="2" style="width: 10px">#</th>
 							<th colspan="2" style="width: 30px">Strike</th>
-							<th rowspan="2" style="width: 30px">Mes</th>
-							<th rowspan="2" style="width: 30px">Ano</th>
 							<th colspan="5">Subyacente</th>
 							<th colspan="4">Calls bajos</th>
 							<th colspan="4">Calls altos</th>
 							<th colspan="4">Puts bajos</th>
 							<th colspan="4">Puts altos</th>
-							<th colspan="4">Spreads</th>
+							<th colspan="4">Ganancias</th>
+							<th colspan="3">Resumen</th>
 						</tr>
 						<tr>
 							<th>Bajo</th>
@@ -33,18 +32,19 @@
 							@include('estrategias::estrategias.bases.titulo-compra-venta')
 							@include('estrategias::estrategias.bases.titulo-compra-venta')
 							@include('estrategias::estrategias.bases.titulo-compra-venta')
-							<th>Bull</th>
-							<th>Bear</th>
-							<th>Último</th>
-							<th>Spread</th>
+							<th>Bull Call</th>
+							<th>Bull Put</th>
+							<th>Bear Call</th>
+							<th>Bear Put</th>
+							<th>Rango</th>
+							<th>Gan</th>
+							<th>%</th>
 						</tr>
 						@foreach($bases as $base)
 						<tr>
 							<td>{{ $bases->firstItem() + $loop->index }}.</td>
 							<td align="right">{{ number_format($base->strike_bajo, 2, ',', '.') }}</td>
 							<td align="right">{{ number_format($base->strike_alto, 2, ',', '.') }}</td>
-							<td></td>
-							<td></td>
 
 							@php($bs = $base->subyacente)
 							@if(isset($bs->simbolo))
@@ -67,7 +67,51 @@
 							@include('estrategias::estrategias.bases.compra-venta')
 
 							@php($bs = $base)
-							@include('estrategias::estrategias.bases.compra-venta')
+							@if($bs)
+								@if($bs->bull_call)
+									<td align="right">{{ number_format($bs->bull_call->gananciaMaxima, 2, '.', ',') }}</td>	
+								@else
+									<td></td>
+								@endif
+								@if($numero = $bs->bull_put)
+									<td align="right">{{ number_format($bs->bull_put->gananciaMaxima, 2, '.', ',') }}</td>	
+								@else
+									<td></td>
+								@endif
+								@if($numero = $bs->bear_call)
+									<td align="right">{{ number_format($bs->bear_call->gananciaMaxima, 2, '.', ',') }}</td>	
+								@else
+									<td></td>
+								@endif
+								@if($numero = $bs->bear_put)
+									<td align="right">{{ number_format($bs->bear_put->gananciaMaxima, 2, '.', ',') }}</td>	
+								@else
+									<td></td>
+								@endif
+								@if($numero = $bs->rango)
+									<td align="right">{{ number_format($numero, 2, '.', ',') }}</td>	
+								@else
+									<td></td>
+								@endif
+								@if($numero = $bs->gananciaMaxima)
+									<td align="right">{{ number_format($numero, 2, '.', ',') }}</td>	
+								@else
+									<td></td>
+								@endif
+								@if($numero = (($bs->gananciaMaxima / $bs->rango) - 1) * 100)
+									<td align="right">{{ number_format($numero, 2, '.', ',') }}</td>	
+								@else
+									<td></td>
+								@endif
+							@else
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							@endif
 
 						</tr>
 						@endforeach
@@ -82,4 +126,6 @@
 		</div>
 	</div>
 </div>
+
+<script>//setTimeout('document.location.reload()',20000); </script>
 @endsection

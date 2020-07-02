@@ -6,44 +6,28 @@ class Bear
 {
 	use HasAttributes;
 
-	private $comprada;
+	protected $comprada;
 
-	private $vendida;
+	protected $vendida;
 
 	public function __construct(Opcion $vendida, Opcion $comprada)
-	{
-		$this->comprada = $comprada;
+  {
+    if ($comprada->strike < $vendida->strike)
+    {
+      dump('Error: Put con opciones invertidas');
 
-		$this->vendida = $vendida;
-	}
+      dump($comprada);
 
-	private function precioCompra() 
-  	{
-  		if (! $this->comprada->precioVenta)
-  		{
-  			return 0;
-  		}
+      dd($venta);
+    }
 
-  		if (! $this->vendida->precioCompra)
-  		{
-  			return 0;
-  		}
+    $this->comprada = $comprada;
 
-  		return $this->vendida->precioCompra - $this->comprada->precioVenta;
-	}
+    $this->vendida = $vendida;
+  }
 
-	private function precioVenta() 
-  	{
-  		if (! $this->comprada->precioCompra)
-  		{
-  			return 0;
-  		}
-
-  		if (! $this->vendida->precioVenta)
-  		{
-  			return 0;
-  		}
-
-  		return $this->comprada->precioCompra - $this->vendida->precioVenta;
-	}
+  protected function rango() 
+  {
+    return $this->comprada->strike - $this->vendida->strike;
+  }
 }

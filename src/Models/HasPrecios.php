@@ -8,39 +8,39 @@ trait HasPrecios
   	{
   		if (isset($this->attributes['puntas']))
 		{
-			return $this->attributes['puntas']['precioCompra'];
+			return $this->attributes['puntas']['precioVenta'];
 		}
 
-		return 0;
+		return null;
 	}
 
 	private function precioVenta() 
   	{
   		if (isset($this->attributes['puntas']))
 		{
-			return $this->attributes['puntas']['precioVenta'];
+			return $this->attributes['puntas']['precioCompra'];
 		}
 
-		return 0;
+		return null;
 	}
 
 	private function precioUltimo() 
   	{
-		return $this->attributes['ultimoPrecio'] ?? 0;
+		return $this->attributes['ultimoPrecio'] ?? null;
 	}
 
 	private function precioSpread() 
   	{
   		if (! $this->precioVenta())
   		{
-  			return 0;
+  			return null;
   		}
 
   		if (! $this->precioCompra())
   		{
-  			return 0;
+  			return null;
   		}
 
-  		return $this->precioVenta() - $this->precioCompra();
+  		return $this->precioCompra() - $this->precioVenta();
 	}
 }

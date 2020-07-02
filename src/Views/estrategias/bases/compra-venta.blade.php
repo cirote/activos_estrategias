@@ -1,10 +1,10 @@
 @if($bs)
-	@if($numero = $bs->precioVenta)
+	@if($numero = $bs->precioCompra)
 		<td align="right">{{ number_format($numero, 2, '.', ',') }}</td>	
 	@else
 		<td></td>
 	@endif
-	@if($numero = $bs->precioCompra)
+	@if($numero = $bs->precioVenta)
 		<td align="right">{{ number_format($numero, 2, '.', ',') }}</td>	
 	@else
 		<td></td>

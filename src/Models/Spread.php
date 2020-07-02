@@ -55,8 +55,14 @@ class Spread
 		}
 
 		return collect($spreads);
+	}
 
-		dd($spreads[0]);
+	public static function optimos()
+	{
+		return static::all()->filter(function ($spread, $key) 
+        {
+        	return $spread->gananciaPorcentual() > 1;
+		});
 	}
 
 	public function __construct(Base $base1, Base $base2)
@@ -69,9 +75,9 @@ class Spread
 
 			$this->subyacente = $base1->call->subyacente;
 
-			$this->bull_call = new Bull($base1->call, $base2->call);
+			$this->bull_call = new BullCall($base1->call, $base2->call);
 
-			$this->bear_call = new Bear($base1->call, $base2->call);
+			$this->bear_call = new BearCall($base1->call, $base2->call);
 		}
 
 		if ($base1->put AND $base2->put)
@@ -82,9 +88,9 @@ class Spread
 
 			$this->subyacente = $base1->put->subyacente;
 
-			$this->bull_put = new Bull($base1->put, $base2->put);
+			$this->bull_put = new BullPut($base1->put, $base2->put);
 
-			$this->bear_put = new Bear($base1->put, $base2->put);
+			$this->bear_put = new BearPut($base1->put, $base2->put);
 		}
 	}
 
@@ -111,6 +117,26 @@ class Spread
 	private function put_alto()
 	{
 		return $this->put_alto;
+	}
+
+	private function bull_put()
+	{
+		return $this->bull_put;
+	}
+
+	private function bear_call()
+	{
+		return $this->bear_call;
+	}
+
+	private function bear_put()
+	{
+		return $this->bear_put;
+	}
+
+	private function bull_call()
+	{
+		return $this->bull_call;
 	}
 
 	private function strike_bajo() 
@@ -143,17 +169,45 @@ class Spread
 		return 0;
 	}
 
-	private function precioCompra() 
+	private function rango() 
+	{
+		return $this->strike_alto() - $this->strike_bajo();
+	}
+
+	protected function gananciaMaximaBull() 
+	{
+		$bullCall = ($this->bull_call())
+			? $this->bull_call()->gananciaMaxima
+			: 0;
+
+		$bullPut = ($this->bull_put())
+			? $this->bull_put()->gananciaMaxima
+			: 0;
+
+		return max($bullCall, $bullPut);
+	}
+
+	protected function gananciaMaximaBear()
+	{
+		$bearCall = ($this->bear_call())
+			? $this->bear_call()->gananciaMaxima
+			: 0;
+
+		$bearPut = ($this->bear_put())
+			? $this->bear_put()->gananciaMaxima
+			: 0;
+
+		return max($bearCall, $bearPut);
+	}
+
+	protected function gananciaMaxima()
+	{
+		return $this->gananciaMaximaBull() + $this->gananciaMaximaBear();
+	}
+
+	protected function gananciaPorcentual() 
   	{
-  		$precio_call = $this->bear_call
-  			? $this->bear_call->precioCompra
-  			: 0;
-
-  		$precio_put = $this->bear_put 
-  			? $this->bear_put->precioCompra
-  			: 0;
-
-		return max($precio_call, $precio_put);
+		return (($this->gananciaMaxima() / $this->rango()) - 1) * 100;
 	}
 
 	private function precioVenta() 

@@ -6,44 +6,28 @@ class Bull
 {
 	use HasAttributes;
 
-	private $comprada;
+	protected $comprada;
 
-	private $vendida;
+	protected $vendida;
 
 	public function __construct(Opcion $comprada, Opcion $vendida)
 	{
+    if ($comprada->strike > $vendida->strike)
+    {
+      dump('Error: Call con opciones invertidas');
+
+      dump($comprada);
+
+      dd($venta);
+    }
+
 		$this->comprada = $comprada;
 
 		$this->vendida = $vendida;
 	}
 
-	private function precioCompra() 
-  	{
-  		if (! $this->comprada->precioCompra)
-  		{
-  			return 0;
-  		}
-
-  		if (! $this->vendida->precioVenta)
-  		{
-  			return 0;
-  		}
-
-  		return $this->vendida->precioVenta - $this->comprada->precioCompra;
-	}
-
-	private function precioVenta() 
-  	{
-  		if (! $this->comprada->precioVenta)
-  		{
-  			return 0;
-  		}
-
-  		if (! $this->vendida->precioCompra)
-  		{
-  			return 0;
-  		}
-
-  		return $this->comprada->precioVenta - $this->vendida->precioCompra;
-	}
+  protected function rango() 
+  {
+    return $this->vendida->strike - $this->comprada->strike;
+  }
 }

@@ -28,8 +28,10 @@ class EstrategiasController extends Controller
 
     public function spreads()
     {
+        //  Cache::forget('datos_base');
+
         return view('estrategias::estrategias.spreads')
-            ->withBases(Spread::all()->paginate(Config::ELEMENTOS_POR_PAGINA));
+            ->withBases(Spread::optimos()->paginate(Config::ELEMENTOS_POR_PAGINA));
     }
 
 	public function lanzamiento_cubierto()
