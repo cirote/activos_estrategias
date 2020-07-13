@@ -12,6 +12,12 @@ class Subyacente
 
 	private $opciones = [];
 
+
+	public static function all()
+	{
+		return resolve(Contenedor::class)->getDatos()['Activos por ticker'];
+	}
+
 	public function __construct($attributes = [])
 	{
 		$this->setAttributes($attributes);
@@ -22,5 +28,17 @@ class Subyacente
 		return resolve(Contenedor::class)->getDatos()['Opciones por sigla'][$this->attributes['tickerOpcion']];
 
 		return $this->opciones;
+	}
+
+	public function vencimientos()
+	{
+		$vencimientos = [];
+
+		foreach (resolve(Contenedor::class)->getDatos()['Opciones por vencimiento'][$this->attributes['tickerOpcion']] as $key => $value) 
+		{
+			$vencimientos[] = substr($key, 4, 2) . '-' . substr($key, 0, 4);
+		}
+
+		return $vencimientos;
 	}
 }

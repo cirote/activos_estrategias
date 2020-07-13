@@ -29,6 +29,14 @@ class Base
 		});
 	}
 
+	public static function serie($ticker, $mes)
+	{
+		return static::all()->filter(function ($base, $key) use ($ticker, $mes)
+        {
+        	return ($base->subyacente->simbolo == $ticker) AND ($base->mes == $mes);	
+		});
+	}
+
 	public function __construct(?Call $call, ?Put $put)
 	{
 		$this->call = $call;

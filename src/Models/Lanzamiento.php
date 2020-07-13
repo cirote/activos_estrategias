@@ -39,12 +39,12 @@ class Lanzamiento
 
   	public function valorImplicito() 
   	{
-		return max($this->subyacente->precioVenta() - $this->call->strike, 0);
+		return max($this->subyacente->precioCompra - $this->call->strike, 0);
 	}
 
 	private function valorExplicito() 
 	{
-		return max($this->call->precioCompra - $this->valorImplicito, 0);
+		return max($this->call->precioVenta - $this->valorImplicito, 0);
 	}
 
 	private function tasa() 

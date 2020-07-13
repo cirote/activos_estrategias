@@ -20,10 +20,19 @@ class EstrategiasController extends Controller
         return redirect()->route('estrategias.bases');
     }
 
-    public function bases()
+    public function bases($subyacente = 'GGAL', $vencimiento = null)
     {
+        if ($vencimiento)
+        {
+            $mes = (int) substr($vencimiento, 0, 2);
+
+        } else {
+
+            $mes = 8;            
+        }
+
         return view('estrategias::estrategias.bases')
-            ->withBases(Base::all()->paginate(Config::ELEMENTOS_POR_PAGINA));
+            ->withBases(Base::serie($subyacente, $mes)->paginate(100));
     }
 
     public function spreads()

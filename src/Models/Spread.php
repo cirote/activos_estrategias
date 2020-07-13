@@ -72,7 +72,6 @@ class Spread
 
     		return ($a->gananciaPorcentual() < $b->gananciaPorcentual()) ? 1 : -1;
 		});
-
 	}
 
 	public function __construct(Base $base1, Base $base2)

@@ -10,6 +10,24 @@
 			</div>
 
 			<div class="box-body">
+
+				@foreach(\Cirote\Estrategias\Models\Subyacente::all() as $subyacente)
+				<div class="btn-group">
+					<a href="{{ route('estrategias.bases', ['subyacente' => $subyacente->simbolo, 'vencimiento' => $subyacente->vencimientos()[0]]) }}" type="button" class="btn btn-default">{{ $subyacente->simbolo }}</a>
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						<span class="caret"></span>
+						<span class="sr-only">Toggle Dropdown</span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						@foreach($subyacente->vencimientos() as $vencimiento)
+						<li><a href="{{ route('estrategias.bases', ['subyacente' => $subyacente->simbolo, 'vencimiento' => $vencimiento]) }}">{{ $vencimiento }}</a></li>
+						@endforeach
+					</ul>
+				</div>
+				@endforeach
+
+                <hr>
+
 				<table class="table table-bordered">
 					<tbody>
 						<tr>
