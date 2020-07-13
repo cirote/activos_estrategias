@@ -151,6 +151,9 @@ class LeerDatosAction
     private function datosActivos()
     {
     	return [
+            ['ALUA', 'ALU'],
+            ['BBAR', 'BBA'],
+            ['BMA',  'BMA'],
             ['PAMP', 'PAM'],
             ['COME', 'COM'],
     		['GGAL', 'GFG'],
