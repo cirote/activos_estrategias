@@ -139,13 +139,16 @@ class LeerDatosAction
             $opcion = new Put($subyacente, $attributes);
         }
 
-        $this->datos['Opciones por sigla'][$sigla][$ticker][$tipo] = $opcion;
+        if ($opcion->cantidadCompra OR $opcion->cantidadVenta)
+        {
+            $this->datos['Opciones por sigla'][$sigla][$ticker][$tipo] = $opcion;
 
-        $fecha = $opcion->fechaVencimiento->format('Ym');
+            $fecha = $opcion->fechaVencimiento->format('Ym');
 
-        $this->datos['Opciones por strike'][$sigla][$opcion->strike_entero][$fecha][$tipo] = $opcion;
+            $this->datos['Opciones por strike'][$sigla][$opcion->strike_entero][$fecha][$tipo] = $opcion;
 
-        $this->datos['Opciones por vencimiento'][$sigla][$fecha][$opcion->strike_entero][$tipo] = $opcion;
+            $this->datos['Opciones por vencimiento'][$sigla][$fecha][$opcion->strike_entero][$tipo] = $opcion;
+        }
     }
 
     private function datosActivos()

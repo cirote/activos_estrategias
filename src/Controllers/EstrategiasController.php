@@ -22,17 +22,13 @@ class EstrategiasController extends Controller
 
     public function bases($subyacente = 'GGAL', $vencimiento = null)
     {
-        if ($vencimiento)
-        {
-            $mes = (int) substr($vencimiento, 0, 2);
+        $mes = ($vencimiento) ? (int) substr($vencimiento, 0, 2) : 8;
 
-        } else {
-
-            $mes = 8;            
-        }
+        $bases = Base::serie($subyacente, $mes);
 
         return view('estrategias::estrategias.bases')
-            ->withBases(Base::serie($subyacente, $mes)->paginate(100));
+            ->withSubyacente($bases->first()->subyacente)
+            ->withBases($bases->paginate(100));
     }
 
     public function spreads()

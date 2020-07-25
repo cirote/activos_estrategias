@@ -7,7 +7,7 @@ use Cirote\Estrategias\Models\Subyacente;
 
 class Opcion
 {
-	use HasAttributes, HasPrecios, HasSimbolo;
+	use HasAttributes, HasPrecios, HasCantidad, HasSimbolo;
 
 	private $subyacente;
 

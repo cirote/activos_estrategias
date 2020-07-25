@@ -47,7 +47,10 @@ class Base
 		{
 			if ($put)
 			{
-				$this->sintetica = new Sintetica($call, $put);
+				if (($put->cantidadVenta AND $call->cantidadCompra) OR ($call->cantidadVenta AND $put->cantidadCompra))
+				{
+					$this->sintetica = new Sintetica($call, $put);
+				}
 			}			
 		}
 	}
