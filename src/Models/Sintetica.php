@@ -28,12 +28,9 @@ class Sintetica
 
 	private function subyacente()
 	{
-		if ($this->call)
-		{
-			return $this->call->subyacente;
-		}
-
-		return $this->put->subyacente;
+		return $this->call
+			? $this->call->subyacente
+			: $this->put->subyacente;
 	}
 
 	private function call()
@@ -48,14 +45,9 @@ class Sintetica
 
 	private function precioCompra() 
   	{
-  		if (! $this->call->precioCompra)
+  		if ((! $this->call->precioCompra) OR (! $this->put->precioVenta))
   		{
-  			return 0;
-  		}
-
-  		if (! $this->put->precioVenta)
-  		{
-  			return 0;
+  			return null;
   		}
 
 		return $this->call->strike - $this->put->precioVenta + $this->call->precioCompra;
@@ -63,16 +55,31 @@ class Sintetica
 
 	private function precioVenta() 
   	{
-  		if (! $this->call->precioVenta)
+  		if ((! $this->call->precioVenta) OR (! $this->put->precioCompra))
   		{
-  			return 0;
-  		}
-
-  		if (! $this->put->precioCompra)
-  		{
-  			return 0;
+  			return null;
   		}
 
 		return $this->call->strike + $this->call->precioVenta - $this->put->precioCompra;
+	}
+
+	private function precioRealCompra() 
+  	{
+  		if ((! $this->call->precioCompra) OR (! $this->put->precioVenta))
+  		{
+  			return null;
+  		}
+
+		return $this->call->precioCompra - $this->put->precioVenta;
+	}
+
+	private function precioRealVenta() 
+  	{
+  		if ((! $this->call->precioVenta) OR (! $this->put->precioCompra))
+  		{
+  			return null;
+  		}
+
+		return $this->call->precioVenta - $this->put->precioCompra;
 	}
 }
