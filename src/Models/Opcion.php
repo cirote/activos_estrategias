@@ -7,7 +7,7 @@ use Cirote\Estrategias\Models\Subyacente;
 
 class Opcion
 {
-	use HasAttributes, HasPrecios, HasCantidad, HasSimbolo;
+	use HasAttributes, HasPrecios, HasCantidad, HasSimbolo, HasVolatilidad;
 
 	private $subyacente;
 
@@ -16,6 +16,11 @@ class Opcion
 		$this->subyacente = $subyacente;
 
 		$this->attributes = $attributes;
+	}
+
+	private function tasaLibreDeRiesgo() 
+  	{
+		return 0.49;
 	}
 
 	private function fechaVencimiento() 

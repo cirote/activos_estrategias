@@ -34,7 +34,9 @@ class Subyacente
 	{
 		$vencimientos = [];
 
-		foreach (resolve(Contenedor::class)->getDatos()['Opciones por vencimiento'][$this->attributes['tickerOpcion']] as $key => $value) 
+		$datos = resolve(Contenedor::class)->getDatos()['Opciones por vencimiento'][$this->attributes['tickerOpcion']];
+
+		foreach ($datos as $key => $value) 
 		{
 			$vencimientos[] = substr($key, 4, 2) . '-' . substr($key, 0, 4);
 		}

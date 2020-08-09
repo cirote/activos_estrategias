@@ -5,8 +5,9 @@
 	<div class="col-md-10">
 		<div class="box">
 
+			@php($base = $bases->first())
 			<div class="box-header with-border">
-				<h3 class="box-title">Bases</h3>
+				<h3 class="box-title">Bases de {{ $base->subyacente->simbolo }} ($ {{ $base->subyacente->precioUltimo }}) vencimiento en {{ $base->dias }} días [{{ $base->mes }}/{{ $base->ano }}]</h3>
 			</div>
 
 			<div class="box-body">
@@ -25,31 +26,6 @@
 					</ul>
 				</div>
 				@endforeach
-
-                <hr>
-
-				<table class="table table-bordered">
-					<tbody>
-						<tr>
-							<th style="width: 30px">Mes</th>
-							<th style="width: 30px">Ano</th>
-							<th style="width: 30px">Subyacente</th>
-							<th style="width: 30px">Compra</th>
-							<th style="width: 30px">Venta</th>
-							<th style="width: 30px">Último</th>
-							<th style="width: 30px">Spread</th>
-						</tr>
-						@php($base = $bases->first())
-						<tr>
-							<td>{{ $base->mes }}</td>
-							<td>{{ $base->ano }}</td>
-
-							@php($bs = $base->subyacente)
-							<td>{{ $bs->simbolo }}</td>
-							@include('estrategias::estrategias.bases.compra-venta')
-						</tr>
-					</tbody>
-				</table>
 
                 <hr>
 

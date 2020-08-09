@@ -85,6 +85,16 @@ class Base
 		return $this->call->strike;
 	}
 
+	private function dias()
+	{
+		if ($this->put)
+		{
+			return $this->put->dias;
+		}
+
+		return $this->call->dias;
+	}
+
 	private function mes()
 	{
 		if ($this->put)
