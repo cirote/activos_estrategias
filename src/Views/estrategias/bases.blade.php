@@ -2,7 +2,7 @@
 
 @section('main_content')
 <div class="row">
-	<div class="col-md-10">
+	<div class="col-md-12">
 		<div class="box">
 
 			@php($base = $bases->first())
@@ -33,7 +33,9 @@
 					<tbody>
 						<tr>
 							<th colspan="4">Calls</th>
+							<th rowspan="2" style="width: 20px"></th>
 							<th rowspan="2" style="width: 30px">Strike</th>
+							<th rowspan="2" style="width: 20px"></th>
 							<th colspan="4">Puts</th>
 							<th colspan="4">Sintéticas</th>
 						</tr>
@@ -45,19 +47,36 @@
 							@include('estrategias::estrategias.bases.sinteticas.titulo')
 						</tr>
 						@foreach($bases as $base)
+						@if((abs($base->subyacente->precioUltimo - $base->strike) / $base->subyacente->precioUltimo) < 0.20)
 						<tr>
 							@php($bs = $base->call)
 							@include('estrategias::estrategias.bases.opciones.renglon')
 
-							<td align="right" bgcolor="#DCDCDC">{{ number_format($base->strike, 2, ',', '.') }}</td>
+							<td align="center" bgcolor="#DCDCDC">
+							@if($bs)
+							<a href='javascript:copyToClipboard("{{ $bs->simbolo }}");'><i class="fa fa-fw fa-arrow-circle-up"></i></a>
+							@endif
+							</td>
+
+							<td align="right" bgcolor="#DCDCDC">
+							{{ number_format($base->strike, 2, ',', '.') }}
+							</td>
 
 							@php($bs = $base->put)
+
+							<td align="center" bgcolor="#DCDCDC">
+							@if($bs)
+							<a href='javascript:copyToClipboard("{{ $bs->simbolo }}");'><i class="fa fa-fw fa-arrow-circle-down"></i></a>
+							@endif
+							</td>
+
 							@include('estrategias::estrategias.bases.opciones.renglon')
 
 							@php($bs = $base->sintetica)
 							@include('estrategias::estrategias.bases.sinteticas.renglon')
 
 						</tr>
+						@endif
 						@endforeach
 					</tbody>
 				</table>
@@ -70,4 +89,16 @@
 		</div>
 	</div>
 </div>
+
+<script>
+function copyToClipboard(text) {
+    var dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+}
+</script>
+
 @endsection

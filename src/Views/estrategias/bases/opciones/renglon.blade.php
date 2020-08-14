@@ -14,6 +14,8 @@
 		@endif
 		</span>
 
+		[{{ number_format(($ve / $bs->subyacente->precioUltimo) * 100, 1, '.', ',') }}%]
+
 		[{{ number_format($bs->volatilidadImplicita($numero), 0, '.', ',') }}]
 		</td>	
 	@else
@@ -33,6 +35,8 @@
 		@endif
 		</span>
 
+		[{{ number_format(($ve / $bs->subyacente->precioUltimo) * 100, 1, '.', ',') }}%]
+
 		[{{ number_format($bs->volatilidadImplicita($numero), 0, '.', ',') }}]
 	</td>	
 	@else
@@ -40,7 +44,21 @@
 	@endif
 
 	@if($numero = $bs->precioUltimo)
-		<td {!! $color !!} align="right">{{ number_format($numero, 2, '.', ',') }}</td>	
+		<td {!! $color !!} align="right">
+		<b>{{ number_format($numero, 2, '.', ',') }}</b>
+
+		@if(($ve = $bs->valorExplicitoUltimo) > 0)
+		<span style="color: blue;">
+		({{ number_format($ve, 2, '.', ',') }})
+		@else
+		<span style="color: red;">
+		({{ number_format(-$ve, 2, '.', ',') }})
+		@endif
+		</span>
+
+		[{{ number_format(($ve / $bs->subyacente->precioUltimo) * 100, 1, '.', ',') }}%]
+
+		[{{ number_format($bs->volatilidadImplicita($numero), 0, '.', ',') }}]
 	@else
 		<td {!! $color !!}></td>
 	@endif

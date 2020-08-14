@@ -20,7 +20,7 @@ class EstrategiasController extends Controller
         return redirect()->route('estrategias.bases');
     }
 
-    public function bases($subyacente = 'GGAL', $vencimiento = null)
+    public function bases($subyacente = 'GGAL', $vencimiento = '10-2020')
     {
         $mes = ($vencimiento) ? (int) substr($vencimiento, 0, 2) : 8;
 
